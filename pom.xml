@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.quarkiverse</groupId>
+        <artifactId>quarkiverse-parent</artifactId>
+        <version>16</version>
+    </parent>
+    <groupId>io.quarkiverse.slack</groupId>
+    <artifactId>quarkus-slack-parent</artifactId>
+    <version>999-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Quarkus Slack - Parent</name>
+
+    <modules>
+        <module>deployment</module>
+        <module>runtime</module>
+        <module>docs</module>
+    </modules>
+
+    <scm>
+        <connection>scm:git:git@github.com:quarkiverse/quarkus-slack.git</connection>
+        <developerConnection>scm:git:git@github.com:quarkiverse/quarkus-slack.git</developerConnection>
+        <url>https://github.com/quarkiverse/quarkus-slack</url>
+    </scm>
+
+    <properties>
+        <quarkus.version>3.8.4</quarkus.version>
+        <slack-api-client.version>1.39.2</slack-api-client.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-bom</artifactId>
+                <version>${quarkus.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.slack.api</groupId>
+                <artifactId>slack-api-client</artifactId>
+                <version>${slack-api-client.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-maven-plugin</artifactId>
+                    <version>${quarkus.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>it</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>!true</value>
+                </property>
+            </activation>
+            <modules>
+                <module>integration-tests</module>
+            </modules>
+        </profile>
+    </profiles>
+</project>

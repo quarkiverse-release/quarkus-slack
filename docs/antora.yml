@@ -1,0 +1,5 @@
+name: quarkus-slack
+title: Slack
+version: dev
+nav:
+  - modules/ROOT/nav.adoc
