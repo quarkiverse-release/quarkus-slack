@@ -9,7 +9,7 @@
     </parent>
     <groupId>io.quarkiverse.slack</groupId>
     <artifactId>quarkus-slack-parent</artifactId>
-    <version>0.0.1</version>
+    <version>999-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Quarkus Slack - Parent</name>
 
@@ -23,7 +23,7 @@
         <connection>scm:git:git@github.com:quarkiverse/quarkus-slack.git</connection>
         <developerConnection>scm:git:git@github.com:quarkiverse/quarkus-slack.git</developerConnection>
         <url>https://github.com/quarkiverse/quarkus-slack</url>
-      <tag>0.0.1</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <properties>
