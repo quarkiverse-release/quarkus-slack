@@ -16,7 +16,6 @@
  */
 package io.quarkiverse.slack.it;
 
-import io.quarkiverse.slack.runtime.SlackConfig;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -26,6 +25,8 @@ import com.slack.api.Slack;
 import com.slack.api.methods.MethodsClient;
 import com.slack.api.methods.request.chat.ChatPostMessageRequest;
 import com.slack.api.methods.response.chat.ChatPostMessageResponse;
+
+import io.quarkiverse.slack.runtime.SlackConfig;
 
 @Path("/slack")
 @ApplicationScoped

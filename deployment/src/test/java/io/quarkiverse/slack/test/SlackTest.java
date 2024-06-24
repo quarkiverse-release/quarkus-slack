@@ -13,6 +13,7 @@ public class SlackTest {
     // Start unit test with your extension loaded
     @RegisterExtension
     static final QuarkusUnitTest unitTest = new QuarkusUnitTest()
+            .overrideConfigKey("quarkus.slack.token", "test-token")
             .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
 
     @Test
