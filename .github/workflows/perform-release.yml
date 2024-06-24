@@ -34,7 +34,7 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Maven release ${{needs.prepare-release.outputs.release_version}}
-        run: mvn deploy -DaltDeploymentRepository=local::file:///tmp/deploy # Deploy to a local repository
+        run: mvn deploy -DperformRelease -DaltDeploymentRepository=local::file:///tmp/deploy # Deploy to a local repository
 
       - name: Upload assets
         uses: actions/upload-artifact@v4
