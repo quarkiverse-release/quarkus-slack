@@ -21,14 +21,14 @@ defaults:
   run:
     shell: bash
 
-env:
-  RELEASE_VERSION: ${{github.event.inputs.version}}
-  ARTIFACT_PATH: ${{env.RUNNER_TEMP}}/${{env.GITHUB_REPOSITORY}}-${{env.RELEASE_VERSION}}.zip # Path to the artifact to be released
-
 jobs:
   perform-release:
     runs-on: ubuntu-latest
     steps:
+      - name: Set environment variables
+        run: |
+          echo "ARTIFACT_PATH=${{env.RUNNER_TEMP}}/${{env.GITHUB_REPOSITORY}}-${{github.event.inputs.version}}.zip" >> $GITHUB_ENV
+
       - uses: actions/checkout@v4
         with:
           ref: ${{github.event.inputs.version}} # The tag created by the release:prepare goal
@@ -42,12 +42,12 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
-      - name: Maven release ${{needs.prepare-release.outputs.release_version}}
+      - name: Maven release ${{github.event.inputs.version}}
         run: |
           mkdir -p $RUNNER_TEMP/$GITHUB_REPOSITORY_OWNER # Create a directory to store the release binaries
           mvn deploy -DperformRelease -DaltDeploymentRepository=local::file://$RUNNER_TEMP/repository # Deploy to a local repository
           cd $RUNNER_TEMP/repository
-          zip -r ${{env.ARTIFACT_PATH}} .
+          zip -r $ARTIFACT_PATH .
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
