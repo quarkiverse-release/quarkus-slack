@@ -58,6 +58,6 @@ jobs:
         with:
           name: ${{env.ARTIFACT_PATH}}
           path: ${{env.ARTIFACT_PATH}}
-          compression-level: 0
+          compression-level: 9
           retention-days: 1
 
