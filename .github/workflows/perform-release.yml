@@ -42,22 +42,20 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Maven release ${{needs.prepare-release.outputs.release_version}}
-        run: mvn deploy -DperformRelease -DaltDeploymentRepository=local::file:///tmp/deploy # Deploy to a local repository
-
-      - name: Zip binaries
         run: |
-          cd /tmp/deploy
-          zip -r /tmp/deploy/$GITHUB_REPOSITORY-$RELEASE_VERSION.zip .
+          mvn deploy -DperformRelease -DaltDeploymentRepository=local::file://$RUNNER_TEMP/repository # Deploy to a local repository
+          cd $RUNNER_TEMP/repository
+          zip -r $RUNNER_TEMP/$GITHUB_REPOSITORY-$RELEASE_VERSION.zip .
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-path: /tmp/deploy/$GITHUB_REPOSITORY-$RELEASE_VERSION.zip
+          subject-path: $RUNNER_TEMP/$GITHUB_REPOSITORY-$RELEASE_VERSION.zip
 
       - name: Upload assets
         uses: actions/upload-artifact@v4
         with:
-          name: release-binaries
-          path: /tmp/deploy/$GITHUB_REPOSITORY-$RELEASE_VERSION.zip
+          name: released-binaries
+          path: $RUNNER_TEMP/$GITHUB_REPOSITORY-$RELEASE_VERSION.zip
           retention-days: 1
 
