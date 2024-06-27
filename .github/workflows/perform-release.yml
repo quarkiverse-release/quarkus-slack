@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Set environment variables
         run: |
-          echo "ARTIFACT_PATH=${{github.repository}}-${{github.event.inputs.version}}.zip" >> $GITHUB_ENV
+          echo "ARTIFACT_PATH=${{github.repository.name}}-${{github.event.inputs.version}}.zip" >> $GITHUB_ENV
 
       - uses: actions/checkout@v4
         with:
@@ -44,7 +44,6 @@ jobs:
 
       - name: Maven release ${{github.event.inputs.version}}
         run: |
-          mkdir -p $RUNNER_TEMP/$GITHUB_REPOSITORY_OWNER # Create a directory to store the release binaries
           mvn deploy -DperformRelease -DaltDeploymentRepository=local::file://$RUNNER_TEMP/repository # Deploy to a local repository
           cd $RUNNER_TEMP/repository
           zip -r $RUNNER_TEMP/$ARTIFACT_PATH .
