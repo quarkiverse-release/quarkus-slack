@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Set environment variables
         run: |
-          echo "ARTIFACT_PATH=${{env.RUNNER_TEMP}}/${{env.GITHUB_REPOSITORY}}-${{github.event.inputs.version}}.zip" >> $GITHUB_ENV
+          echo "ARTIFACT_PATH=${{github.repository}}-${{github.event.inputs.version}}.zip" >> $GITHUB_ENV
 
       - uses: actions/checkout@v4
         with:
@@ -47,17 +47,17 @@ jobs:
           mkdir -p $RUNNER_TEMP/$GITHUB_REPOSITORY_OWNER # Create a directory to store the release binaries
           mvn deploy -DperformRelease -DaltDeploymentRepository=local::file://$RUNNER_TEMP/repository # Deploy to a local repository
           cd $RUNNER_TEMP/repository
-          zip -r $ARTIFACT_PATH .
+          zip -r $RUNNER_TEMP/$ARTIFACT_PATH .
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-path: ${{env.ARTIFACT_PATH}}
+          subject-path: $RUNNER_TEMP/${{env.ARTIFACT_PATH}}
 
       - name: Upload assets
         uses: actions/upload-artifact@v4
         with:
           name: released-binaries
-          path: ${{env.ARTIFACT_PATH}}
+          path: $RUNNER_TEMP/${{env.ARTIFACT_PATH}}
           retention-days: 1
 
