@@ -43,6 +43,7 @@ jobs:
 
       - name: Maven release ${{needs.prepare-release.outputs.release_version}}
         run: |
+          mkdir -p $RUNNER_TEMP/$GITHUB_REPOSITORY_OWNER # Create a directory to store the release binaries
           mvn deploy -DperformRelease -DaltDeploymentRepository=local::file://$RUNNER_TEMP/repository # Deploy to a local repository
           cd $RUNNER_TEMP/repository
           zip -r $RUNNER_TEMP/$GITHUB_REPOSITORY-$RELEASE_VERSION.zip .
