@@ -43,10 +43,10 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Maven release ${{github.event.inputs.version}}
-        run: |
-          mvn deploy -DperformRelease -DaltDeploymentRepository=local::file://${{ github.workspace }}/repository # Deploy to a local repository
-          cd ${{ github.workspace }}/repository
-          tar -czvf ${{ github.workspace }}/$ARTIFACT_PATH .
+        run: mvn deploy -DperformRelease -DaltDeploymentRepository=local::file://${{ github.workspace }}/repository
+
+      - name: Tarball the artifacts
+        run: tar -czvf ${{env.ARTIFACT_PATH}} -C repository .
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
@@ -58,6 +58,6 @@ jobs:
         with:
           name: ${{env.ARTIFACT_PATH}}
           path: ${{env.ARTIFACT_PATH}}
-          compression-level: 9
+          compression-level: 0
           retention-days: 1
 
