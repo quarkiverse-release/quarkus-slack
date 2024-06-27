@@ -20,6 +20,7 @@ concurrency:
 defaults:
   run:
     shell: bash
+    working-directory: ./build
 
 jobs:
   perform-release:
