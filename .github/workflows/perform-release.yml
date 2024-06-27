@@ -52,12 +52,12 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-path: $RUNNER_TEMP/${{env.ARTIFACT_PATH}}
+          subject-path: ${{env.RUNNER_TEMP}}/${{env.ARTIFACT_PATH}}
 
       - name: Upload assets
         uses: actions/upload-artifact@v4
         with:
           name: released-binaries
-          path: $RUNNER_TEMP/${{env.ARTIFACT_PATH}}
+          path: ${{env.RUNNER_TEMP}}/${{env.ARTIFACT_PATH}}
           retention-days: 1
 
