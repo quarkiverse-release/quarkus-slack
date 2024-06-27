@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${RELEASE_VERSION} # The tag created by the release:prepare goal
+          ref: ${{github.event.inputs.version}} # The tag created by the release:prepare goal
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
