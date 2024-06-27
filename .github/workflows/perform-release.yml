@@ -51,7 +51,7 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-path: ${{ github.work space }}/${{env.ARTIFACT_PATH}}
+          subject-path: ${{ github.workspace }}/${{env.ARTIFACT_PATH}}
 
       - name: Upload assets
         uses: actions/upload-artifact@v4
