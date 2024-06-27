@@ -49,6 +49,7 @@ jobs:
         run: tar -czvf ${{env.ARTIFACT_PATH}} -C repository .
 
       - name: Generate artifact attestation
+        id: attest_build_provenance
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: ${{env.ARTIFACT_PATH}}
@@ -57,7 +58,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{env.ARTIFACT_PATH}}
-          path: ${{env.ARTIFACT_PATH}}
+          path: |
+            ${{env.ARTIFACT_PATH}}
+            ${{steps.attest_build_provenance.outputs.bundle-path}}
           compression-level: 0
           retention-days: 1
 
