@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Set environment variables
         run: |
-          echo "ARTIFACT_PATH=${{github.repository.name}}-${{github.event.inputs.version}}.zip" >> $GITHUB_ENV
+          echo "ARTIFACT_PATH=${{github.event.repository.name}}-${{github.event.inputs.version}}.zip" >> $GITHUB_ENV
 
       - uses: actions/checkout@v4
         with:
@@ -44,19 +44,19 @@ jobs:
 
       - name: Maven release ${{github.event.inputs.version}}
         run: |
-          mvn deploy -DperformRelease -DaltDeploymentRepository=local::file://$RUNNER_TEMP/repository # Deploy to a local repository
-          cd $RUNNER_TEMP/repository
-          zip -r $RUNNER_TEMP/$ARTIFACT_PATH .
+          mvn deploy -DperformRelease -DaltDeploymentRepository=local::file://${{ github.workspace }}/repository # Deploy to a local repository
+          cd ${{ github.workspace }}/repository
+          zip -r ${{ github.workspace }}/$ARTIFACT_PATH .
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-path: ${{env.RUNNER_TEMP}}/${{env.ARTIFACT_PATH}}
+          subject-path: ${{ github.workspace }}/${{env.ARTIFACT_PATH}}
 
       - name: Upload assets
         uses: actions/upload-artifact@v4
         with:
           name: released-binaries
-          path: ${{env.RUNNER_TEMP}}/${{env.ARTIFACT_PATH}}
+          path: ${{ github.workspace }}/${{env.ARTIFACT_PATH}}
           retention-days: 1
 
