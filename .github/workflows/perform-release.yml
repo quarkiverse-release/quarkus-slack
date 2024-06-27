@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Set environment variables
         run: |
-          echo "ARTIFACT_PATH=$RUNNER_TEMP/$GITHUB_REPOSITORY-${{github.event.inputs.version}}.zip" >> $GITHUB_ENV
+          echo "ARTIFACT_PATH=${{env.RUNNER_TEMP}}/${{env.GITHUB_REPOSITORY}}-${{github.event.inputs.version}}.zip" >> $GITHUB_ENV
 
       - uses: actions/checkout@v4
         with:
