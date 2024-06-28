@@ -48,6 +48,9 @@ jobs:
       - name: ZIP the artifacts
         run: cd repository && zip -r -9 ../${{env.ARTIFACT_PATH}} .
 
+      - name: Echo SHA256 ZIP the artifacts
+        run: cat ${{env.ARTIFACT_PATH}} | shasum -a 256
+
       - name: Generate artifact attestation
         id: attest_build_provenance
         uses: actions/attest-build-provenance@v1
