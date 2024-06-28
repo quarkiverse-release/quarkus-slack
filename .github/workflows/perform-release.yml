@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Set environment variables
         run: |
-          echo "ARTIFACT_PATH=${{github.event.repository.name}}-${{github.event.inputs.version}}.zip" >> $GITHUB_ENV
+          echo "ARTIFACT_PATH=${{github.event.repository.name}}-${{github.event.inputs.version}}.tar.gz" >> $GITHUB_ENV
 
       - uses: actions/checkout@v4
         with:
@@ -45,11 +45,8 @@ jobs:
       - name: Maven release ${{github.event.inputs.version}}
         run: mvn deploy -DperformRelease -DaltDeploymentRepository=local::file://${{ github.workspace }}/repository
 
-      - name: ZIP the artifacts
-        run: cd repository && zip -r -9 ../${{env.ARTIFACT_PATH}} .
-
-      - name: Echo SHA256 ZIP the artifacts
-        run: cat ${{env.ARTIFACT_PATH}} | shasum -a 256
+      - name: Tarball the artifacts
+        run: tar -czvf ${{env.ARTIFACT_PATH}} -C repository .
 
       - name: Generate artifact attestation
         id: attest_build_provenance
@@ -60,15 +57,5 @@ jobs:
       - name: Upload assets
         uses: actions/upload-artifact@v4
         with:
-          name: ${{env.ARTIFACT_PATH}}
           path: ${{env.ARTIFACT_PATH}}
           retention-days: 1
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: ${{env.ARTIFACT_PATH}}
-          path: dist
-
-      - name: Echo SHA256 ZIP the artifacts
-        run: cat dist/${{env.ARTIFACT_PATH}} | shasum -a 256
-
