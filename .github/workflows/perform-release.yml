@@ -67,4 +67,4 @@ jobs:
           repo: quarkiverse-release/quarkiverse-release
           inputs: '{ "github_repository": "${{ github.repository }}", "version": "${{github.event.inputs.version}}", "name": "${{github.event.repository.name}}", "run_id": "${{github.run_id}}"}'
           # Required when using the `repo` option. Either a PAT or a token generated from the GitHub app or CLI
-          token: "${{ github.token }}"
+          token: "${{ secrets.PUBLISH_TOKEN }}"
