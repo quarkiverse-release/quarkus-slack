@@ -61,10 +61,15 @@ jobs:
           retention-days: 1
 
       - name: Invoke Quarkiverse Release workflow
-        uses: benc-uk/workflow-dispatch@v1
+        uses: peter-evans/repository-dispatch@v3
         with:
-          workflow: deploy-artifacts.yml
-          repo: quarkiverse-release/quarkiverse-release
-          inputs: '{ "github_repository": "${{ github.repository }}", "version": "${{github.event.inputs.version}}", "name": "${{github.event.repository.name}}", "run_id": "${{github.run_id}}"}'
-          # Required when using the `repo` option. Either a PAT or a token generated from the GitHub app or CLI
-          token: "${{ secrets.PUBLISH_TOKEN }}"
+          token: ${{ secrets.PUBLISH_TOKEN }}
+          repository: quarkiverse-release/quarkiverse-release
+          event-type: deploy_central
+          client-payload: |-
+            {
+              "github_repository": "${{ github.repository }}",
+              "run_id": "${{ github.run_id }}",
+              "version": "${{ github.event.inputs.version }}",
+              "name": "${{ github.repository_name }}"
+            }
