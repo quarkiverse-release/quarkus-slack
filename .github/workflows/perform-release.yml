@@ -63,7 +63,7 @@ jobs:
       - name: Invoke Quarkiverse Release workflow
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PUBLISH_TOKEN }}
           repository: quarkiverse-release/quarkiverse-release
           event-type: deploy_central
           client-payload: |-
