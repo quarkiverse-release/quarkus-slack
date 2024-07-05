@@ -12,6 +12,7 @@ permissions:
   attestations: write
   id-token: write
   contents: read
+  repository-projects: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -61,15 +62,11 @@ jobs:
           retention-days: 1
 
       - name: Invoke Quarkiverse Release workflow
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.PUBLISH_TOKEN }}
-          repository: quarkiverse-release/quarkiverse-release
-          event-type: deploy_central
-          client-payload: |-
-            {
-              "github_repository": "${{ github.repository }}",
-              "run_id": "${{ github.run_id }}",
-              "version": "${{ github.event.inputs.version }}",
-              "name": "${{ github.event.repository.name }}"
-            }
+        run: |
+          echo "{\"github_repository\":\"${GH_REPO}\",\"run_id\":\"${GH_RUN_ID}\",\"version\":\"${ARTIFACT_VERSION}\",\"name\":\"${ARTIFACT_NAME}\"}" | gh workflow run deploy-artifacts.yml -R quarkiverse-release/quarkiverse-release --json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          GH_RUN_ID: ${{ github.run_id }}
+          ARTIFACT_NAME: ${{ github.event.repository.name }}
+          ARTIFACT_VERSION: ${{ github.event.inputs.version }}
