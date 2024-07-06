@@ -44,7 +44,7 @@ jobs:
         run: mvn deploy -DperformRelease -DaltDeploymentRepository=local::file://${{ github.workspace }}/repository
 
       - name: Tarball the artifacts
-        run: tar -czvf ${{env.ARTIFACT_PATH}} -C repository .
+        run: tar -czvf ${ARTIFACT_PATH} -C repository .
 
       - name: Generate artifact attestation
         id: attest_build_provenance
