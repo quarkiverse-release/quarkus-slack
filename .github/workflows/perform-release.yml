@@ -60,7 +60,11 @@ jobs:
 
       - name: Invoke Quarkiverse Release workflow
         run: |
-          echo "{\"github_repository\":\"${GH_REPO}\",\"run_id\":\"${GH_RUN_ID}\",\"version\":\"${ARTIFACT_VERSION}\",\"name\":\"${ARTIFACT_NAME}\"}" | gh workflow run deploy-artifacts.yml -R quarkiverse-release/quarkiverse-release --json
+          gh workflow run deploy-artifacts.yml -R quarkiverse-release/quarkiverse-release \
+            -f github_repository=${GH_REPO} \
+            -f run_id=${GH_RUN_ID} \
+            -f version=${ARTIFACT_VERSION} \
+            -f name=${ARTIFACT_NAME}
         env:
           GH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           GH_REPO: ${{ github.repository }}
